@@ -2,13 +2,12 @@ package Menu;
 
 import Customer.Customers;
 import Exceptions.ExceptionManager;
-import Group.Group;
 import Group.Groups;
 import Group.Parameter;
 
 import java.io.IOException;
 
-public class GroupMenu extends MenuImpl {
+public class GroupMenu implements Menu {
     static GroupMenu instance;
 
     private final Groups groups;
@@ -49,13 +48,13 @@ public class GroupMenu extends MenuImpl {
     public void selectMenu(int menu) throws IOException {
         switch(menu){
             case 1:
-                classifyStandardMenu();
+                initGroupsStandard();
                 break;
             case 2:
-                updateClassifyMenu();
+                updateGroupsStandard();
                 break;
             case 3:
-                getClassifyStandardMenu();
+                printGroupsStandard();
                 break;
             case 4:
                 break;
@@ -63,16 +62,12 @@ public class GroupMenu extends MenuImpl {
 
     }
 
-    private void getClassifyStandardMenu() throws IOException {
+    private void printGroupsStandard() throws IOException {
         try {
-            if (isInit(groups)) {
-                System.out.println("조회를 원하는 그룹 번호를 입력해주세요.");
-                System.out.println("1. 일반");
-                System.out.println("2. VIP");
-                System.out.println("3. VVIP");
-                String grade = inputString();
-                if (inputValidator(grade)) {
-                    groups.getGroup(Integer.parseInt(grade));
+            if (checkIsGroupInit(groups)) {
+                int grade =getGroupIndexFromInput();
+                if (validateInput(grade)) {
+                    groups.getGroupByIndex(grade);
                 }
             }
         }
@@ -82,22 +77,13 @@ public class GroupMenu extends MenuImpl {
     }
 
 
-    private void updateClassifyMenu() throws IOException {
+    private void updateGroupsStandard() throws IOException {
         try {
-            if (isInit(groups)) {
-                System.out.println("해당 그룹의 등급을 입력해주세요.");
-                System.out.println("1. 일반");
-                System.out.println("2. VIP");
-                System.out.println("3. VVIP");
-                String grade = inputString();
-                if (inputValidator(grade)) {
-                    System.out.println("입력 원/시간 기준을 입력해주세요.");
-                    System.out.println("기준 이용 시간을 시간단위로 입력해주세요");
-                    int spendHour = Integer.parseInt(inputString());
-                    System.out.println("기준 이용 금액을 만원 단위로 입력해주세요");
-                    int spendMoney = Integer.parseInt(inputString());
-                    Parameter parameter = Parameter.of(spendHour, spendMoney);
-                    if (groups.updateGroup(Integer.parseInt(grade), parameter)) {
+            if (checkIsGroupInit(groups)) {
+                int grade = getGroupIndexFromInput();
+                if (validateInput(grade)) {
+                    Parameter parameter = buildParameter();
+                    if (groups.updateGroupByIndex(grade, parameter)) {
                         System.out.println("등급 기준 수정이 완료되었습니다.");
                     } else {
                         System.out.println("등급 기준 수정에 실패했습니다.");
@@ -115,21 +101,12 @@ public class GroupMenu extends MenuImpl {
         }
 
 
-    private void classifyStandardMenu() throws IOException {
+    private void initGroupsStandard() throws IOException {
         try{
-        System.out.println("해당 그룹의 등급을 설정해주세요.");
-        System.out.println("1. 일반");
-        System.out.println("2. VIP");
-        System.out.println("3. VVIP");
-        String grade = inputString();
-        if(inputValidator(grade)) {
-            System.out.println("분류 기준을 입력해주세요. 입력 원/시간 이상의 그룹을 생성합니다.");
-            System.out.println("기준 이용 시간을 설정해주세요.");
-            int spendHourStandard = Integer.parseInt(inputString());
-            System.out.println("기준 이용 금액을 설정해주세요.");
-            int spendMoneyStandard = Integer.parseInt(inputString());
-            Parameter parameter = Parameter.of(spendHourStandard, spendMoneyStandard);
-            if (groups.addGroup(Integer.parseInt(grade), parameter)) {
+            int grade = getGroupIndexFromInput();
+        if(validateInput(grade)) {
+            Parameter parameter = buildParameter();
+            if (groups.addGroup(grade, parameter)) {
                 System.out.println("분류 기준이 설정되었습니다.");
             } else {
                 System.out.println("실패했습니다.");
@@ -144,7 +121,7 @@ public class GroupMenu extends MenuImpl {
         }
     }
 
-    private boolean isInit(Groups groups){
+    private boolean checkIsGroupInit(Groups groups){
         for(int i=3; i>0; i--){
             if(groups.getGroups()[i].getParameter().getSpendHourStandard() ==0 && groups.getGroups()[i].getParameter().getSpendMoneyStandard() ==0){
                 return false;
@@ -153,11 +130,40 @@ public class GroupMenu extends MenuImpl {
         return true;
     }
 
-    public boolean inputValidator(String input){
-        if(input.equals("1") || input.equals("2") || input.equals("3")){
+    public boolean validateInput(int input){
+        if(input ==1 || input ==2 || input ==3){
             return true;
         }
         return false;
+    }
+
+    public Parameter buildParameter() throws IOException {
+        try {
+            System.out.println("분류 기준을 입력해주세요. 시간/만원 단위로 입력해주세요.");
+            System.out.println("이용 시간을 입력해주세요.");
+            int spendHour = Integer.parseInt(inputString());
+            System.out.println("이용 금액을 입력해주세요.");
+            int spendMoney = Integer.parseInt(inputString());
+            return Parameter.of(spendHour, spendMoney);
+        }
+        catch (NumberFormatException e){
+            ExceptionManager.catchInputTypeMismatchException();
+            return null;
+        }
+    }
+
+    public int getGroupIndexFromInput() throws IOException {
+        try {
+            System.out.println("해당 그룹의 등급을 입력해주세요.");
+            System.out.println("1. 일반");
+            System.out.println("2. VIP");
+            System.out.println("3. VVIP");
+            return Integer.parseInt(inputString());
+        }
+        catch (NumberFormatException e){
+            ExceptionManager.catchInputTypeMismatchException();
+            return -1;
+        }
     }
 
 

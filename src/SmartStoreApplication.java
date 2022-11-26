@@ -3,6 +3,8 @@ import Customer.Customers;
 import Exceptions.SameCustomerIdException;
 import Group.Groups;
 import Group.Parameter;
+import Menu.CustomerMenu;
+import Menu.GroupMenu;
 import Menu.MenuImpl;
 
 import java.io.IOException;
@@ -22,7 +24,7 @@ public class SmartStoreApplication {
 
     public static SmartStoreApplication getInstance() {
         if (smartStoreApplication == null) {
-            smartStoreApplication = new SmartStoreApplication(new MenuImpl(), Groups.getInstance(), Customers.getInstance());
+            smartStoreApplication = new SmartStoreApplication(MenuImpl.getInstance(), Groups.getInstance(), Customers.getInstance());
         }
         return smartStoreApplication;
     }
