@@ -1,7 +1,6 @@
 package Menu;
 
-import Customer.ClassifiedCustomers;
-import Customer.Customers;
+import Exceptions.SameCustomerIdException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,7 +10,7 @@ public interface Menu {
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
      int showMenu() throws IOException;
 
-     void selectMenu(int menu) throws IOException;
+     void selectMenu(int menu) throws IOException, SameCustomerIdException;
 
     default String inputString() throws IOException {
         String input = br.readLine();

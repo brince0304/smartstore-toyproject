@@ -1,5 +1,7 @@
 package Customer;
 
+import Group.Group;
+import Group.Parameter;
 import Group.GroupType;
 
 import java.util.Objects;
@@ -11,15 +13,9 @@ public class Customer {
     private int useHour;
     private int spendMoney;
 
-    private GroupType groupType;
+    private Group group ;
 
-
-
-    private static int customerCount = 0;
-
-
-
-
+    private static int customerCount = 1;
     protected Customer(){};
     public Customer(String name, String customerId, int useHour, int spendMoney) {
         this.id = String.format("%04d", customerCount++);
@@ -27,7 +23,9 @@ public class Customer {
         this.customerId = customerId;
         this.useHour = useHour;
         this.spendMoney = spendMoney;
+        this.group = Group.of(Parameter.of(0,0), 0);
     }
+
 
     public static Customer of(String name, String customerId, int useHour, int spendMoney){
         return new Customer(name,customerId,useHour,spendMoney);
@@ -38,7 +36,7 @@ public class Customer {
         if (this == o) return true;
         if (!(o instanceof Customer)) return false;
         Customer customer = (Customer) o;
-        return id.equals(customer.id);
+        return customerId.equals(customer.customerId);
     }
 
     @Override
@@ -49,16 +47,22 @@ public class Customer {
 
     @Override
     public String toString() {
-        return "Customer{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", customerId='" + customerId + '\'' +
-                ", useHour=" + useHour +
-                ", spendMoney=" + spendMoney +
-                ", groupType=" + groupType +
-                '}';
+        return
+                "고유번호='" + id + '\'' +
+                ", 이름='" + name + '\'' +
+                ", 고객아이디='" + customerId + '\'' +
+                ", 이용시간=" + useHour +
+                ", 이용금액=" + spendMoney +
+                "만원, 등급=" + group.getGroupType();
     }
 
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
 
     public String getId() {
         return id;
@@ -108,11 +112,13 @@ public class Customer {
         this.spendMoney = spendMoney;
     }
 
-    public GroupType getGroupType() {
-        return groupType;
-    }
 
-    public void setGroupType(GroupType groupType) {
-        this.groupType = groupType;
+    public String toStringWithoutType() {
+        return
+                "고유번호='" + id + '\'' +
+                        ", 이름='" + name + '\'' +
+                        ", 고객아이디='" + customerId + '\'' +
+                        ", 이용시간=" + useHour +
+                        ", 이용금액=" + spendMoney;
     }
 }
