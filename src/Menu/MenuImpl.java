@@ -9,8 +9,23 @@ import Group.Groups;
 import java.io.IOException;
 
 public class MenuImpl implements  Menu{
+    static MenuImpl instance;
+    private final CustomerMenu customerMenu;
+    private final GroupMenu groupMenu;
+    private final SummaryMenu summaryMenu;
 
-    public MenuImpl() {
+    private MenuImpl(CustomerMenu customerMenu, GroupMenu groupMenu, SummaryMenu summaryMenu) {
+        this.customerMenu = customerMenu;
+        this.groupMenu = groupMenu;
+        this.summaryMenu = summaryMenu;
+
+    }
+
+    public static MenuImpl getInstance(){
+        if(instance == null){
+            instance = new MenuImpl(CustomerMenu.getInstance(), GroupMenu.getInstance(), SummaryMenu.getInstance());
+        }
+        return instance;
     }
 
     @Override
@@ -33,15 +48,12 @@ public class MenuImpl implements  Menu{
 
         switch (menu){
             case 1:
-                CustomerMenu customerMenu = CustomerMenu.getInstance();
                 customerMenu.selectMenu(customerMenu.showMenu());
                 break;
             case 2:
-                GroupMenu groupMenu = GroupMenu.getInstance();
                 groupMenu.selectMenu(groupMenu.showMenu());
                 break;
             case 3:
-                SummaryMenu summaryMenu = SummaryMenu.getInstance();
                 summaryMenu.selectMenu(summaryMenu.showMenu());
                 break;
             case 4:

@@ -7,7 +7,7 @@ import Exceptions.SameCustomerIdException;
 
 import java.io.IOException;
 
-public class CustomerMenu extends MenuImpl {
+public class CustomerMenu implements Menu {
 
     static CustomerMenu customerMenu;
     private final Customers customers;
@@ -51,17 +51,17 @@ public class CustomerMenu extends MenuImpl {
                     System.out.println("등록을 원하는 인원 수를 입력하세요");
                     int count = Integer.parseInt(inputString());
                     for (int i = 0; i < count; i++) {
-                        addCustomer(addCustomerMenu());
+                        customerBuilder(customerBuilder());
                     }
                     break;
                 case 2:
-                    printCustomerCountBySerialId();
-                    deleteCustomer(deleteCustomerMenu());
+                    customers.printCustomerCountBySerialId();
+                    deleteCustomerFromCustomersBySerialId(inputIdForCustomerDeleting());
                     break;
                 case 3:
-                    printCustomerCountBySerialId();
+                    customers.printCustomerCountBySerialId();
                     System.out.println("수정을 원하는 고유 번호를 입력해주세요.");
-                    updateCustomerMenu(inputString());
+                    updateCustomerInfoBySerialId(inputString());
                     break;
                 case 4:
                     printCustomerListWithoutType();
@@ -77,26 +77,26 @@ public class CustomerMenu extends MenuImpl {
     }
 
 
-    private String deleteCustomerMenu() throws IOException {
+    private String inputIdForCustomerDeleting() throws IOException {
         System.out.println("삭제할 고객의 고유번호을 입력하세요");
         String serialId = inputString();
         return serialId;
     }
 
 
-    public Customer addCustomerMenu() throws IOException, SameCustomerIdException {
+    public Customer customerBuilder() throws IOException, SameCustomerIdException {
         try {
             System.out.println("이름을 입력해주세요");
             String name = inputString();
-            if (!customerNameValidator(name)) {
+            if (!validateCustomerName(name)) {
                 return null;
             }
             System.out.println("아이디를 입력해주세요");
             String id = inputString();
-            if (!customerIdValidator(id)) {
+            if (!validateCustomerId(id)) {
                 return null;
             }
-            if (isCustomerExits(id)) {
+            if (checkIsCustomerExistBySerialId(id)) {
                 ExceptionManager.catchSameCustomerIdException();
                 return null;
             } else {
@@ -118,7 +118,7 @@ public class CustomerMenu extends MenuImpl {
 
 
 
-    public void addCustomer(Customer customer) throws SameCustomerIdException {
+    public void customerBuilder(Customer customer) throws SameCustomerIdException {
         if (customer != null) {
             if (customers.addCustomer(customer)) {
                 System.out.println("등록되었습니다.");
@@ -128,10 +128,10 @@ public class CustomerMenu extends MenuImpl {
         }
     }
 
-    public void deleteCustomer(String id) throws SameCustomerIdException {
+    public void deleteCustomerFromCustomersBySerialId(String id) throws SameCustomerIdException {
         if(!customers.isEmpty()){
-        if(customers.getById(id)!=null) {
-            customers.deleteCustomerById(id);
+        if(customers.getBySerialId(id)!=null) {
+            customers.deleteCustomerBySerialId(id);
         }
         else{
             ExceptionManager.catchCustomerIdNotFoundedException();
@@ -142,7 +142,7 @@ public class CustomerMenu extends MenuImpl {
 
     }
 
-    public void updateCustomerMenu(String id) throws IOException,NumberFormatException {
+    public void updateCustomerInfoBySerialId(String id) throws IOException,NumberFormatException {
         if(!customers.isEmpty()) {
             try {
                 if (customers.getByCustomerId(id) == null) {
@@ -150,19 +150,19 @@ public class CustomerMenu extends MenuImpl {
                     System.out.println("고객 수정 메뉴");
                     System.out.println("이름을 입력해주세요");
                     String name = inputString();
-                    if (!customerNameValidator(name)) {
+                    if (!validateCustomerName(name)) {
                         return;
                     }
                     System.out.println("아이디를 입력해주세요");
                     String customerId = inputString();
-                    if (!customerIdValidator(customerId)) {
+                    if (!validateCustomerId(customerId)) {
                         return;
                     }
                     System.out.println("이용 금액을 입력해주세요");
                     int spendMoney = Integer.parseInt(inputString());
                     System.out.println("이용 시간을 입력해주세요");
                     int spendHour = Integer.parseInt(inputString());
-                    customers.updateCustomerById(id, name, customerId, spendHour, spendMoney);
+                    customers.updateCustomerBySerialId(id, name, customerId, spendHour, spendMoney);
                 }
             } catch (NumberFormatException e) {
                 ExceptionManager.catchInputTypeMismatchException();
@@ -189,21 +189,11 @@ public class CustomerMenu extends MenuImpl {
         }
     }
 
-    public void printCustomerCountBySerialId(){
-        if(!customers.isEmpty()) {
-            String minId = customers.getMinId();
-            String maxId = customers.getMaxId();
-            System.out.println("고객 수 : " + customers.getCustomerCount());
-            System.out.println(minId + "~" + maxId + ", 중에서 선택해주세요.");
-        }
-        else{
-            ExceptionManager.catchNoCustomersException();
-        }
-    }
 
 
 
-    public boolean customerIdValidator(String customerId){
+
+    public boolean validateCustomerId(String customerId){
         if(customerId.length() < 5 || customerId.length() > 12){
             ExceptionManager.catchCustomerIdNotValidatedException();
             return false;
@@ -215,7 +205,7 @@ public class CustomerMenu extends MenuImpl {
         return true;
     }
 
-    public boolean customerNameValidator(String customerName){
+    public boolean validateCustomerName(String customerName){
         if(customerName.length() < 2){
             ExceptionManager.catchCustomerNameNotValidatedException();
             return false;
@@ -223,7 +213,7 @@ public class CustomerMenu extends MenuImpl {
         return true;
     }
 
-    public boolean isCustomerExits(String customerId)  {
+    public boolean checkIsCustomerExistBySerialId(String customerId)  {
             for (int i = 0; i < customers.getCustomerCount(); i++) {
                 if (customers.getCustomers()[i] != null) {
                     if (customers.getCustomers()[i].getCustomerId().equals(customerId)) {

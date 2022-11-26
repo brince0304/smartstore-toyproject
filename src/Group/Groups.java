@@ -1,8 +1,5 @@
 package Group;
 
-import Customer.Customer;
-import Customer.Customers;
-
 
 public class Groups {
     static Groups instance;
@@ -29,7 +26,7 @@ public boolean addGroup(int grade,Parameter parameter) {
 }
 
 
-    public boolean updateGroup(int grade, Parameter parameter) {
+    public boolean updateGroupByIndex(int grade, Parameter parameter) {
         for (int i = 0; i < groups.length; i++) {
             if (groups[i].getGroupType().equals(GroupType.values()[grade])) {
                 groups[i].setParameter(parameter);
@@ -40,7 +37,7 @@ public boolean addGroup(int grade,Parameter parameter) {
         return false;
     }
 
-    public void getGroup(int inputString) {
+    public void getGroupByIndex(int inputString) {
         for (int i = 0; i < groups.length; i++) {
                 if (groups[i].getGroupType().equals(GroupType.values()[inputString])) {
                     System.out.println(groups[i].toString());
