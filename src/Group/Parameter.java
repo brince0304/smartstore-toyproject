@@ -1,5 +1,7 @@
 package Group;
 
+import java.util.Objects;
+
 public class Parameter {
 
     private int spendHourStandard;
@@ -28,5 +30,26 @@ public class Parameter {
 
     public void setSpendMoneyStandard(int spendMoneyStandard) {
         this.spendMoneyStandard = spendMoneyStandard;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Parameter)) return false;
+        Parameter parameter = (Parameter) o;
+        return spendHourStandard == parameter.spendHourStandard && spendMoneyStandard == parameter.spendMoneyStandard;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(spendHourStandard, spendMoneyStandard);
+    }
+
+    @Override
+    public String toString() {
+        return "Parameter{" +
+                "spendHourStandard=" + spendHourStandard +
+                ", spendMoneyStandard=" + spendMoneyStandard +
+                '}';
     }
 }

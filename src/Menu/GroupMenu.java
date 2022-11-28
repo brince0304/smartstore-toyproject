@@ -1,7 +1,6 @@
 package Menu;
 
-import Customer.Customers;
-import Exceptions.ExceptionManager;
+import Utils.ExceptionManager;
 import Group.Groups;
 import Group.Parameter;
 
@@ -11,16 +10,14 @@ public class GroupMenu implements Menu {
     static GroupMenu instance;
 
     private final Groups groups;
-    private final Customers customers;
 
-    private GroupMenu(Groups groups, Customers customers) {
+    private GroupMenu(Groups groups) {
         this.groups = groups;
-        this.customers = customers;
     }
 
     static GroupMenu getInstance(){
         if(instance == null){
-            instance = new GroupMenu(Groups.getInstance(), Customers.getInstance());
+            instance = new GroupMenu(Groups.getInstance());
         }
         return instance;
     }
@@ -33,12 +30,11 @@ public class GroupMenu implements Menu {
             System.out.println("1. 분류 기준 설정");
             System.out.println("2. 분류 기준 수정");
             System.out.println("3. 분류 기준 조회");
-            System.out.println("3. 메인 메뉴로 돌아가기");
+            System.out.println("4. 메인 메뉴로 돌아가기");
             System.out.println("메뉴를 선택하세요");
             return Integer.parseInt(inputString());
         }
         catch (NumberFormatException e){
-            ExceptionManager.catchInputTypeMismatchException();
             return 0;
         }
 
@@ -58,17 +54,23 @@ public class GroupMenu implements Menu {
                 break;
             case 4:
                 break;
+            default:
+                System.out.println("잘못된 입력입니다.");
+                break;
         }
 
     }
 
     private void printGroupsStandard() throws IOException {
         try {
-            if (checkIsGroupInit(groups)) {
+            if (groups.checkIsGroupInit()) {
                 int grade =getGroupIndexFromInput();
                 if (validateInput(grade)) {
                     groups.getGroupByIndex(grade);
                 }
+            }
+            else{
+                System.out.println("그룹이 초기화 되지 않았습니다.");
             }
         }
         catch (NumberFormatException e){
@@ -79,13 +81,14 @@ public class GroupMenu implements Menu {
 
     private void updateGroupsStandard() throws IOException {
         try {
-            if (checkIsGroupInit(groups)) {
+            if (groups.checkIsGroupInit()) {
                 int grade = getGroupIndexFromInput();
                 if (validateInput(grade)) {
                     Parameter parameter = buildParameter();
+                    if(parameter!=null){
                     if (groups.updateGroupByIndex(grade, parameter)) {
                         System.out.println("등급 기준 수정이 완료되었습니다.");
-                    } else {
+                    } }else {
                         System.out.println("등급 기준 수정에 실패했습니다.");
                     }
                 } else {
@@ -106,9 +109,10 @@ public class GroupMenu implements Menu {
             int grade = getGroupIndexFromInput();
         if(validateInput(grade)) {
             Parameter parameter = buildParameter();
+            if(parameter!=null){
             if (groups.addGroup(grade, parameter)) {
                 System.out.println("분류 기준이 설정되었습니다.");
-            } else {
+            }} else {
                 System.out.println("실패했습니다.");
             }
         }
@@ -121,14 +125,7 @@ public class GroupMenu implements Menu {
         }
     }
 
-    private boolean checkIsGroupInit(Groups groups){
-        for(int i=3; i>0; i--){
-            if(groups.getGroups()[i].getParameter().getSpendHourStandard() ==0 && groups.getGroups()[i].getParameter().getSpendMoneyStandard() ==0){
-                return false;
-            }
-        }
-        return true;
-    }
+
 
     public boolean validateInput(int input){
         if(input ==1 || input ==2 || input ==3){

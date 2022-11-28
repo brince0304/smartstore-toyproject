@@ -1,7 +1,7 @@
-package Exceptions;
+package Utils;
 
 public class InputTypeMismatchException extends NumberFormatException{
     public InputTypeMismatchException() {
-        super("입력 형식이 잘못되었습니다.");
+        super("잘못된 입력이거나 실행입니다.");
     }
 }

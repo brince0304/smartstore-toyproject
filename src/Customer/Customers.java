@@ -1,7 +1,5 @@
 package Customer;
 
-import Exceptions.ExceptionManager;
-import Exceptions.NullpointerException;
 import Group.Group;
 
 import java.util.Arrays;
@@ -13,14 +11,14 @@ import Group.GroupType;
 public class Customers {
     private static Customers instance;
 
-
+    private final ClassifiedCustomers classifiedCustomers;
     private Customer[] customers = new Customer[5];
 
     private int customerCount = 0;
 
     public static Customers getInstance() {
         if (instance == null) {
-            instance = new Customers();
+            instance = new Customers(ClassifiedCustomers.getInstance());
         }
         return instance;
     }
@@ -33,19 +31,15 @@ public class Customers {
         return customerCount;
     }
 
-    private Customers() {
-    }
-
-    public void setCustomerCount(int customerCount) {
-        this.customerCount = customerCount;
-    }
-
-    public void setCustomers(Customer[] customers) {
-        this.customers = customers;
+    private Customers(ClassifiedCustomers classifiedCustomers
+    ) {
+        this.classifiedCustomers = classifiedCustomers;
     }
 
 
-    public boolean addCustomer(Customer customer) throws NullpointerException {
+
+
+    public boolean addCustomer(Customer customer) throws NullPointerException { // 고객 추가
         if (customer != null) {
             if (customerCount < customers.length) {
                 for (int i = 0; i < customers.length; i++) {
@@ -68,20 +62,19 @@ public class Customers {
                 return false;
             }
         } else {
-            ExceptionManager.catchSameCustomerIdException();
             return false;
         }
         return false;
     }
 
 
-    public void grow() {
+    public void grow() { // 배열의 크기를 늘려주는 메소드
         Customer[] temp = Arrays.copyOf(customers, customers.length * 2);
         customers = temp;
     }
 
 
-    public void deleteCustomerBySerialId(String id) {
+    public void deleteCustomerBySerialId(String id) { //고유번호로 등록 고객 삭제
         for (int i = 0; i < customerCount; i++) {
             if (customers[i] != null) {
                 if (customers[i].getId().equals(id)) {
@@ -98,7 +91,7 @@ public class Customers {
         }
     }
 
-    public boolean isEmpty(){
+    public boolean isEmpty(){ // 고객배열이 비어있는지 확인
         if(customerCount == 0){
             return true;
         }
@@ -106,7 +99,7 @@ public class Customers {
     }
 
 
-    public void trimToSize() {
+    public void trimToSize() { // 고객이 삭제되면 배열의 크기를 줄여준다.
         Customer[] temp = Arrays.copyOf(customers, customerCount);
         customers = temp;
     }
@@ -124,16 +117,14 @@ public class Customers {
                     if (customers[i].getId().equals(id)) {
                         customers[i] = customer;
                         return true;
-
-
                     }
                 }
             }
         }
         return false;
-    }
+    } // 고객 정보 수정
 
-    public Customer getBySerialId(String id) {
+    public Customer getBySerialId(String id) { // 고유넘버로 고객 찾기
         for (int i = 0; i < customerCount; i++) {
             if (customers[i] != null) {
                 if (customers[i].getId().equals(id)) {
@@ -141,12 +132,11 @@ public class Customers {
                 }
             }
         }
-        ExceptionManager.catchCustomerIdNotFoundedException();
         return null;
     }
 
 
-    public Customer getByCustomerId(String customerId) {
+    public Customer getByCustomerId(String customerId) { // 고객 아이디로 고객 찾기
         for (int i = 0; i < customerCount; i++) {
             if (customers[i] != null) {
                 if (customers[i].getId().equals(customerId)) {
@@ -154,34 +144,32 @@ public class Customers {
                 }
             }
         }
-        ExceptionManager.catchCustomerIdNotFoundedException();
         return null;
     }
 
 
-    public String getMinId() {
+    public String getMinId() { // 고유넘버 처음값
         String minId = customers[0].getId();
         return minId;
     }
 
-    public String getMaxId() {
+    public String getMaxId() { //고유넘버 끝값
         String maxId = customers[customerCount-1].getId();
         return maxId;
     }
 
-    public void printCustomerCountBySerialId(){
-        if(!isEmpty()) {
+    public void printCustomerCountBySerialId(){ //고객수 출력
+        if(customerCount == 0){
+            return;
+        }
             String minId = getMinId();
             String maxId = getMaxId();
             System.out.println("고객 수 : " + customerCount);
             System.out.println(minId + "~" + maxId + ", 중에서 선택해주세요.");
-        }
-        else{
-            ExceptionManager.catchNoCustomersException();
-        }
+
     }
 
-    public void printNoneGroupByClassifiedCustomersList(Customer[] customers) {
+    public void printNoneGroupByClassifiedCustomersList(Customer[] customers) { //그룹에 속하지 않은 고객들의 리스트를 출력하는 메소드
         for (int i = 0; i < customers.length; i++) {
             if(customers[i]!=null) {
                 if (customers[i].getGroup().getGroupType().ordinal() == 0) {
@@ -189,9 +177,10 @@ public class Customers {
                 }
             }
         }
-    }
+    } //생각해보니 그룹을 분류하지 않고 계속 탐색을 하면 성능이 안좋을 수도 있다.
 
-    public void printGeneralGroupByClassifiedCustomersList(Customer[] customers) {
+
+    public void printGeneralGroupByClassifiedCustomersList(Customer[] customers) { // 일반그룹
         for (int i = 0; i < customers.length; i++) {
             if(customers[i]!=null) {
                 if (customers[i].getGroup().getGroupType().ordinal() == 1) {
@@ -201,7 +190,7 @@ public class Customers {
         }
     }
 
-    public void printVIPGroupByClassifiedCustomersList(Customer[] customers) {
+    public void printVIPGroupByClassifiedCustomersList(Customer[] customers) { // VIP 고객 출력
         for (int i = 0; i < customers.length; i++) {
             if(customers[i]!=null) {
                 if (customers[i].getGroup().getGroupType().ordinal() == 2) {
@@ -211,7 +200,7 @@ public class Customers {
         }
     }
 
-    public void printVVIPGroupByClassifiedCustomersList(Customer[] customers) {
+    public void printVVIPGroupByClassifiedCustomersList(Customer[] customers) { //VVIP그룹 고객 리스트 출력
         for (int i = 0; i < customers.length; i++) {
             if(customers[i]!=null) {
                 if (customers[i].getGroup().getGroupType().ordinal() == 3) {
@@ -318,7 +307,7 @@ public class Customers {
         return customers1;
     }
 
-    public void initCustomersGroup() {
+    public void initCustomersGroup() { //고객 등급 초기화
         Customer[] temp = Arrays.copyOf(customers, customerCount);
         for (int i = 0; i < temp.length; i++) {
             if (temp[i] != null) {
@@ -346,10 +335,50 @@ public class Customers {
         }
         customers = temp;
     }catch (Exception e){
-            ExceptionManager.catchUnknownException();
+            System.out.println("고객 등급 분류에 실패하였습니다.");
         }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Customers)) return false;
+        Customers customers1 = (Customers) o;
+        return Arrays.equals(customers, customers1.customers);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(customers);
+    }
+
+    @Override
+    public String toString() {
+        return "Customers{" +
+                "customers=" + Arrays.toString(customers) +
+                ", customerCount=" + customerCount +
+                '}';
+    }
+
+
+    public void groupByGroup(Groups groups) {
+        Customer[][] classifiedTemp = new Customer[groups.getGroups().length][1];
+        for (int i = 0; i < 4; i++) {
+            Customer[] temp1 = new Customer[customerCount];
+            int count = 0;
+            for (int j = 0; j < customerCount; j++) {
+                if (customers[j] != null) {
+                    if (customers[j].getGroup().getGroupType().ordinal() == i) {
+                        temp1[count] = customers[j];
+                        count++;
+                    }
+                }
+            }
+            Customer[] temp2 = Arrays.copyOf(temp1, count);
+            classifiedTemp[i] = temp2;
+        }
+        classifiedCustomers.setClassifiedCustomers(classifiedTemp);
+    }
 }
 
 

@@ -1,6 +1,8 @@
 package Group;
 
 
+import java.util.Arrays;
+
 public class Groups {
     static Groups instance;
     private final Group[] groups;
@@ -37,6 +39,8 @@ public boolean addGroup(int grade,Parameter parameter) {
         return false;
     }
 
+
+
     public void getGroupByIndex(int inputString) {
         for (int i = 0; i < groups.length; i++) {
                 if (groups[i].getGroupType().equals(GroupType.values()[inputString])) {
@@ -54,6 +58,34 @@ public boolean addGroup(int grade,Parameter parameter) {
       return groups;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Groups)) return false;
+        Groups groups1 = (Groups) o;
+        return Arrays.equals(groups, groups1.groups);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(groups);
+    }
+
+    @Override
+    public String toString() {
+        return "Groups{" +
+                "groups=" + Arrays.toString(groups) +
+                '}';
+    }
+
+    public boolean checkIsGroupInit(){
+        for(int i=3; i>0; i--){
+            if(groups[i].getParameter().getSpendHourStandard() ==0 && groups[i].getParameter().getSpendMoneyStandard() ==0){
+                return false;
+            }
+        }
+        return true;
+    }
 
 }
 

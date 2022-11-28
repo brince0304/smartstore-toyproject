@@ -1,10 +1,7 @@
 import Customer.Customer;
 import Customer.Customers;
-import Exceptions.SameCustomerIdException;
 import Group.Groups;
 import Group.Parameter;
-import Menu.CustomerMenu;
-import Menu.GroupMenu;
 import Menu.MenuImpl;
 
 import java.io.IOException;
@@ -29,14 +26,14 @@ public class SmartStoreApplication {
         return smartStoreApplication;
     }
 
-    public void run() throws IOException, IOException, SameCustomerIdException {
+    public void run() throws IOException, IOException {
         while (true) {
             int menu = this.menu.showMenu();
             this.menu.selectMenu(menu);
         }
     }
 
-    public void test() throws IOException, SameCustomerIdException {
+    public void test() throws IOException {
         groupsTest.addGroup(1, Parameter.of(10,10));
         groupsTest.addGroup(2, Parameter.of(20,20));
         groupsTest.addGroup(3, Parameter.of(30,30));
