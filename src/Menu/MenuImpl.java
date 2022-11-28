@@ -1,10 +1,7 @@
 package Menu;
 
-import Customer.Customers;
-import Exceptions.ExceptionManager;
-import Exceptions.InputTypeMismatchException;
-import Exceptions.SameCustomerIdException;
-import Group.Groups;
+import Utils.ExceptionManager;
+import Utils.InputTypeMismatchException;
 
 import java.io.IOException;
 
@@ -39,30 +36,27 @@ public class MenuImpl implements  Menu{
             return Integer.parseInt(inputString());
         }
         catch (NumberFormatException e){
-            ExceptionManager.catchInputTypeMismatchException();
             return 0;
         }
     }
     @Override
-    public void selectMenu(int menu) throws IOException, SameCustomerIdException {
-
-        switch (menu){
-            case 1:
-                customerMenu.selectMenu(customerMenu.showMenu());
-                break;
-            case 2:
-                groupMenu.selectMenu(groupMenu.showMenu());
-                break;
-            case 3:
-                summaryMenu.selectMenu(summaryMenu.showMenu());
-                break;
-            case 4:
-                System.out.println("프로그램을 종료합니다.");
-                System.exit(0);
-                break;
-            default:
-                ExceptionManager.catchInputTypeMismatchException();
-                break;
-        }
-    }
+    public void selectMenu(int menu) throws IOException {
+            switch (menu) {
+                case 1:
+                    customerMenu.selectMenu(customerMenu.showMenu());
+                    break;
+                case 2:
+                    groupMenu.selectMenu(groupMenu.showMenu());
+                    break;
+                case 3:
+                    summaryMenu.selectMenu(summaryMenu.showMenu());
+                    break;
+                case 4:
+                    System.out.println("프로그램을 종료합니다.");
+                    System.exit(0);
+                    break;
+                default:
+                    ExceptionManager.catchInputTypeMismatchException();
+                    break;
+            }}
 }

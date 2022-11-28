@@ -6,7 +6,7 @@ import Group.Parameter;
 import java.util.Objects;
 
 public class Customer {
-    private String id;
+    private final String id;
     private String name;
     private String customerId;
     private int spendHour;
@@ -15,7 +15,7 @@ public class Customer {
     private Group group ;
 
     private static int customerCount = 1;
-    protected Customer(){};
+
     public Customer(String name, String customerId, int spendHour, int spendMoney) {
         this.id = String.format("%04d", customerCount++);
         this.name = name;
@@ -67,9 +67,6 @@ public class Customer {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public static int getCustomerCount() {
         return customerCount;
