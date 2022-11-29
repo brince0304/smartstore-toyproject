@@ -16,7 +16,7 @@ public class Customer {
 
     private static int customerCount = 1;
 
-    public Customer(String name, String customerId, int spendHour, int spendMoney) {
+    private Customer(String name, String customerId, int spendHour, int spendMoney) {
         this.id = String.format("%04d", customerCount++);
         this.name = name;
         this.customerId = customerId;

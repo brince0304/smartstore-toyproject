@@ -90,8 +90,7 @@ public class CustomerMenu implements Menu { //예외는 메뉴에서 처리
 
     public String inputIdForCustomerDeleting() throws IOException {
         System.out.println("삭제할 고객의 고유번호을 입력하세요");
-        String serialId = inputString();
-        return serialId;
+        return inputString();
     }
 
     public void repeatCustomerRegisterByCount(int count) throws IOException {
