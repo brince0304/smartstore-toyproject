@@ -65,35 +65,38 @@ public class ClassifiedCustomers {
         }
     }
 
-    public void printBySortedDetailNONE(Customer[] customers){
+    public void printNoneGroupBySortedList(Customer[] customers){
         System.out.println("분류가 안된 고객 명단");
-        for (int i = 0; i < customers.length; i++) {
-            if(customers[i]!=null){
-                System.out.println(customers[i].toString());
-            }        }
+        for (Customer customer : customers) {
+            if (customer != null) {
+                System.out.println(customer);
+            }
+        }
     }
 
-    public void printBySortedDetailGENERAL(Customer[] customers){
+    public void printGeneralGroupBySortedList(Customer[] customers){
         System.out.println("일반 등급 고객 명단");
-        for (int i = 0; i < customers.length; i++) {
-            if(customers[i]!=null){
-                System.out.println(customers[i].toString());
-            }        }
+        for (Customer customer : customers) {
+            if (customer != null) {
+                System.out.println(customer);
+            }
+        }
     }
 
-    public void printBySortedDetailVIP(Customer[] customers){
+    public void printVIPGroupBySortedList(Customer[] customers){
         System.out.println("VIP 등급 고객 명단");
-        for (int i = 0; i < customers.length; i++) {
-            if(customers[i]!=null){
-                System.out.println(customers[i].toString());
-            }        }
+        for (Customer customer : customers) {
+            if (customer != null) {
+                System.out.println(customer);
+            }
+        }
     }
 
-    public void printBySortedDetailVVIP(Customer[] customers){
+    public void printVVIPGroupBySortedList(Customer[] customers){
         System.out.println("VVIP 등급 고객 명단");
-        for (int i = 0; i < customers.length; i++) {
-            if(customers[i]!=null){
-                System.out.println(customers[i].toString());
+        for (Customer customer : customers) {
+            if (customer != null) {
+                System.out.println(customer);
             }
         }
     }
@@ -117,14 +120,11 @@ public Customer[] getVVIPGroup(){
 
     public Customer[] sortByNameAsc(Customer[] customers) {
         Customer[] customers1 = Arrays.copyOf(customers, customers.length);
-        Arrays.sort(customers1, new Comparator<Customer>() {
-            @Override
-            public int compare(Customer o1, Customer o2) {
-                if (o1 != null && o2 != null) {
-                    return o1.getName().compareTo(o2.getName());
-                }
-                return 0;
+        Arrays.sort(customers1, (Comparator<Customer>) (o1, o2) -> {
+            if (o1 != null && o2 != null) {
+                return o1.getName().compareTo(o2.getName());
             }
+            return 0;
         });
         return customers1;
     }
@@ -132,14 +132,11 @@ public Customer[] getVVIPGroup(){
     public Customer[] sortByNameDesc(Customer[] customers) {
         Customer[] customers1 = Arrays.copyOf(customers, customers.length);
 
-        Arrays.sort(customers1, new Comparator<Customer>() {
-            @Override
-            public int compare(Customer o1, Customer o2) {
-                if (o1 != null && o2 != null) {
-                    return o2.getName().compareTo(o1.getName());
-                }
-                return 0;
+        Arrays.sort(customers1, (Comparator<Customer>) (o1, o2) -> {
+            if (o1 != null && o2 != null) {
+                return o2.getName().compareTo(o1.getName());
             }
+            return 0;
         });
         return customers1;
     }
@@ -149,14 +146,11 @@ public Customer[] getVVIPGroup(){
     public Customer[] sortBySpendMoneyDesc(Customer[] customers) {
         Customer[] customers1 = Arrays.copyOf(customers, customers.length);
 
-        Arrays.sort(customers1, new Comparator<Customer>() {
-            @Override
-            public int compare(Customer o1, Customer o2) {
-                if (o1 != null && o2 != null) {
-                    return o2.getSpendMoney() - o1.getSpendMoney();
-                } else {
-                    return 0;
-                }
+        Arrays.sort(customers1, (Comparator<Customer>) (o1, o2) -> {
+            if (o1 != null && o2 != null) {
+                return o2.getSpendMoney() - o1.getSpendMoney();
+            } else {
+                return 0;
             }
         });
         return customers1;
@@ -165,14 +159,11 @@ public Customer[] getVVIPGroup(){
     public Customer[] sortBySpendMoneyAsc(Customer[] customers) {
         Customer[] customers1 = Arrays.copyOf(customers, customers.length);
 
-        Arrays.sort(customers1, new Comparator<Customer>() {
-            @Override
-            public int compare(Customer o1, Customer o2) {
-                if (o1 != null && o2 != null) {
-                    return o1.getSpendMoney()- o2.getSpendMoney() ;
-                } else {
-                    return 0;
-                }
+        Arrays.sort(customers1, (Comparator<Customer>) (o1, o2) -> {
+            if (o1 != null && o2 != null) {
+                return o1.getSpendMoney()- o2.getSpendMoney() ;
+            } else {
+                return 0;
             }
         });
         return customers1;
@@ -180,15 +171,12 @@ public Customer[] getVVIPGroup(){
     public Customer[] sortBySpendHourDesc(Customer[] customers) {
         Customer[] customers1 = Arrays.copyOf(customers, customers.length);
 
-        Arrays.sort(customers1, new Comparator<Customer>() {
-            @Override
-            public int compare(Customer o1, Customer o2) {
-                if (o1 != null && o2 != null) {
-                    return o2.getSpendHour() - o1.getSpendHour();
-                } else {
-                    return 0;
+        Arrays.sort(customers1, (Comparator<Customer>) (o1, o2) -> {
+            if (o1 != null && o2 != null) {
+                return o2.getSpendHour() - o1.getSpendHour();
+            } else {
+                return 0;
 
-                }
             }
         });
         return customers1;
@@ -197,15 +185,12 @@ public Customer[] getVVIPGroup(){
     public Customer[] sortBySpendHourAsc(Customer[] customers) {
         Customer[] customers1 = Arrays.copyOf(customers, customers.length);
 
-        Arrays.sort(customers1, new Comparator<Customer>() {
-            @Override
-            public int compare(Customer o1, Customer o2) {
-                if (o1 != null && o2 != null) {
-                    return o1.getSpendHour()- o2.getSpendHour();
-                } else {
-                    return 0;
+        Arrays.sort(customers1, (Comparator<Customer>) (o1, o2) -> {
+            if (o1 != null && o2 != null) {
+                return o1.getSpendHour()- o2.getSpendHour();
+            } else {
+                return 0;
 
-                }
             }
         });
         return customers1;

@@ -29,9 +29,9 @@ public boolean addGroup(int grade,Parameter parameter) {
 
 
     public boolean updateGroupByIndex(int grade, Parameter parameter) {
-        for (int i = 0; i < groups.length; i++) {
-            if (groups[i].getGroupType().equals(GroupType.values()[grade])) {
-                groups[i].setParameter(parameter);
+        for (Group group : groups) {
+            if (group.getGroupType().equals(GroupType.values()[grade])) {
+                group.setParameter(parameter);
                 System.out.println("그룹이 수정되었습니다.");
                 return true;
             }
@@ -49,8 +49,8 @@ public boolean addGroup(int grade,Parameter parameter) {
         }
     }
     public void printGroupList() {
-        for (int i = 0; i < groups.length; i++) {
-            System.out.println(groups[i].toString());
+        for (Group group : groups) {
+            System.out.println(group.toString());
         }
     }
 

@@ -3,7 +3,7 @@ package Customer;
 import Group.Group;
 
 import java.util.Arrays;
-import java.util.Comparator;
+
 import Group.Parameter;
 import Group.Groups;
 import Group.GroupType;
@@ -69,8 +69,7 @@ public class Customers {
 
 
     public void grow() { // 배열의 크기를 늘려주는 메소드
-        Customer[] temp = Arrays.copyOf(customers, customers.length * 2);
-        customers = temp;
+        customers = Arrays.copyOf(customers, customers.length * 2);
     }
 
 
@@ -92,21 +91,17 @@ public class Customers {
     }
 
     public boolean isEmpty(){ // 고객배열이 비어있는지 확인
-        if(customerCount == 0){
-            return true;
-        }
-        return false;
+        return customerCount == 0;
     }
 
 
     public void trimToSize() { // 고객이 삭제되면 배열의 크기를 줄여준다.
-        Customer[] temp = Arrays.copyOf(customers, customerCount);
-        customers = temp;
+        customers = Arrays.copyOf(customers, customerCount);
     }
 
 
     public boolean updateCustomerBySerialId(String id, String name, String customerId, int spendHour, int spendMoney) {
-        Customer customer = getBySerialId(id);
+        Customer customer = getCustomerBySerialId(id);
         if (customer != null) {
             customer.setName(name);
             customer.setCustomerId(customerId);
@@ -124,7 +119,7 @@ public class Customers {
         return false;
     } // 고객 정보 수정
 
-    public Customer getBySerialId(String id) { // 고유넘버로 고객 찾기
+    public Customer getCustomerBySerialId(String id) { // 고유넘버로 고객 찾기
         for (int i = 0; i < customerCount; i++) {
             if (customers[i] != null) {
                 if (customers[i].getId().equals(id)) {
@@ -149,13 +144,11 @@ public class Customers {
 
 
     public String getMinId() { // 고유넘버 처음값
-        String minId = customers[0].getId();
-        return minId;
+        return customers[0].getId();
     }
 
     public String getMaxId() { //고유넘버 끝값
-        String maxId = customers[customerCount-1].getId();
-        return maxId;
+        return customers[customerCount-1].getId();
     }
 
     public void printCustomerCountBySerialId(){ //고객수 출력
@@ -176,7 +169,7 @@ public class Customers {
                     System.out.println(customers[i].toString());
                 }
             }
-        }
+        } //사용하지 않는다.
     } //생각해보니 그룹을 분류하지 않고 계속 탐색을 하면 성능이 안좋을 수도 있다.
 
 
@@ -187,7 +180,7 @@ public class Customers {
                     System.out.println(customers[i].toString());
                 }
             }
-        }
+        }//사용하지 않는다.
     }
 
     public void printVIPGroupByClassifiedCustomersList(Customer[] customers) { // VIP 고객 출력
@@ -197,7 +190,7 @@ public class Customers {
                     System.out.println(customers[i].toString());
                 }
             }
-        }
+        }//사용하지 않는다.
     }
 
     public void printVVIPGroupByClassifiedCustomersList(Customer[] customers) { //VVIP그룹 고객 리스트 출력
@@ -207,105 +200,9 @@ public class Customers {
                     System.out.println(customers[i].toString());
                 }
             }
-        }
+        }//사용하지 않는다.
     }
 
-
-    public Customer[] sortByNameAsc() {
-        Customer[] customers1 = Arrays.copyOf(customers, customerCount);
-        Arrays.sort(customers1, new Comparator<Customer>() {
-            @Override
-            public int compare(Customer o1, Customer o2) {
-                if (o1 != null && o2 != null) {
-                    return o1.getName().compareTo(o2.getName());
-                }
-                return 0;
-            }
-        });
-        return customers1;
-    }
-
-    public Customer[] sortByNameDesc() {
-        Customer[] customers1 = Arrays.copyOf(customers, customerCount);
-
-        Arrays.sort(customers1, new Comparator<Customer>() {
-            @Override
-            public int compare(Customer o1, Customer o2) {
-                if (o1 != null && o2 != null) {
-                    return o2.getName().compareTo(o1.getName());
-                }
-                return 0;
-            }
-        });
-        return customers1;
-    }
-
-
-
-    public Customer[] sortBySpendMoneyDesc() {
-        Customer[] customers1 = Arrays.copyOf(customers, customerCount);
-
-        Arrays.sort(customers1, new Comparator<Customer>() {
-            @Override
-            public int compare(Customer o1, Customer o2) {
-                if (o1 != null && o2 != null) {
-                    return o2.getSpendMoney() - o1.getSpendMoney();
-                } else {
-                    return 0;
-                }
-            }
-        });
-        return customers1;
-    }
-
-    public Customer[] sortBySpendMoneyAsc() {
-        Customer[] customers1 = Arrays.copyOf(customers, customerCount);
-
-        Arrays.sort(customers1, new Comparator<Customer>() {
-            @Override
-            public int compare(Customer o1, Customer o2) {
-                if (o1 != null && o2 != null) {
-                    return o1.getSpendMoney()- o2.getSpendMoney() ;
-                } else {
-                    return 0;
-                }
-            }
-        });
-        return customers1;
-    }
-    public Customer[] sortBySpendHourDesc() {
-        Customer[] customers1 = Arrays.copyOf(customers, customerCount);
-
-        Arrays.sort(customers1, new Comparator<Customer>() {
-            @Override
-            public int compare(Customer o1, Customer o2) {
-                if (o1 != null && o2 != null) {
-                    return o2.getSpendHour() - o1.getSpendHour();
-                } else {
-                    return 0;
-
-                }
-            }
-        });
-        return customers1;
-    }
-
-    public Customer[] sortBySpendHourAsc() {
-        Customer[] customers1 = Arrays.copyOf(customers, customerCount);
-
-        Arrays.sort(customers1, new Comparator<Customer>() {
-            @Override
-            public int compare(Customer o1, Customer o2) {
-                if (o1 != null && o2 != null) {
-                    return o1.getSpendHour()- o2.getSpendHour();
-                } else {
-                    return 0;
-
-                }
-            }
-        });
-        return customers1;
-    }
 
     public void initCustomersGroup() { //고객 등급 초기화
         Customer[] temp = Arrays.copyOf(customers, customerCount);
@@ -361,7 +258,7 @@ public class Customers {
     }
 
 
-    public void groupByGroup(Groups groups) {
+    public void groupingByGroup(Groups groups) {
         Customer[][] classifiedTemp = new Customer[groups.getGroups().length][1];
         for (int i = 0; i < 4; i++) {
             Customer[] temp1 = new Customer[customerCount];

@@ -26,14 +26,14 @@ public class SmartStoreApplication {
         return smartStoreApplication;
     }
 
-    public void run() throws IOException, IOException {
+    public void run() throws IOException {
         while (true) {
             int menu = this.menu.showMenu();
             this.menu.selectMenu(menu);
         }
     }
 
-    public void test() throws IOException {
+    public void test()   {
         groupsTest.addGroup(1, Parameter.of(10,10));
         groupsTest.addGroup(2, Parameter.of(20,20));
         groupsTest.addGroup(3, Parameter.of(30,30));

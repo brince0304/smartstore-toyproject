@@ -11,7 +11,6 @@ public interface Menu {
      void selectMenu(int menu) throws IOException;
 
     default String inputString() throws IOException {
-        String input = br.readLine();
-        return input;
+        return br.readLine();
     }
 }

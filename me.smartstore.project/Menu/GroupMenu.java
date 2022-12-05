@@ -44,13 +44,13 @@ public class GroupMenu implements Menu {
     public void selectMenu(int menu) throws IOException {
         switch(menu){
             case 1:
-                initGroupsStandard();
+                initGroupStandard();
                 break;
             case 2:
-                updateGroupsStandard();
+                updateGroupStandard();
                 break;
             case 3:
-                printGroupsStandard();
+                printGroupStandard();
                 break;
             case 4:
                 break;
@@ -61,7 +61,7 @@ public class GroupMenu implements Menu {
 
     }
 
-    private void printGroupsStandard() throws IOException {
+    private void printGroupStandard() throws IOException {
         try {
             if (groups.checkIsGroupInit()) {
                 int grade =getGroupIndexFromInput();
@@ -79,12 +79,12 @@ public class GroupMenu implements Menu {
     }
 
 
-    private void updateGroupsStandard() throws IOException {
+    private void updateGroupStandard() throws IOException {
         try {
             if (groups.checkIsGroupInit()) {
                 int grade = getGroupIndexFromInput();
                 if (validateInput(grade)) {
-                    Parameter parameter = buildParameter();
+                    Parameter parameter = create();
                     if(parameter!=null){
                     if (groups.updateGroupByIndex(grade, parameter)) {
                         System.out.println("등급 기준 수정이 완료되었습니다.");
@@ -104,11 +104,11 @@ public class GroupMenu implements Menu {
         }
 
 
-    private void initGroupsStandard() throws IOException {
+    private void initGroupStandard() throws IOException {
         try{
             int grade = getGroupIndexFromInput();
         if(validateInput(grade)) {
-            Parameter parameter = buildParameter();
+            Parameter parameter = create();
             if(parameter!=null){
             if (groups.addGroup(grade, parameter)) {
                 System.out.println("분류 기준이 설정되었습니다.");
@@ -128,13 +128,10 @@ public class GroupMenu implements Menu {
 
 
     public boolean validateInput(int input){
-        if(input ==1 || input ==2 || input ==3){
-            return true;
-        }
-        return false;
+        return input == 1 || input == 2 || input == 3;
     }
 
-    public Parameter buildParameter() throws IOException {
+    public Parameter create() throws IOException {
         try {
             System.out.println("분류 기준을 입력해주세요. 시간/만원 단위로 입력해주세요.");
             System.out.println("이용 시간을 입력해주세요.");
@@ -152,7 +149,7 @@ public class GroupMenu implements Menu {
     public int getGroupIndexFromInput() throws IOException {
         try {
             System.out.println("해당 그룹의 등급을 입력해주세요.");
-            System.out.println("1. 일반");
+            System.out.println("1. GENERAL");
             System.out.println("2. VIP");
             System.out.println("3. VVIP");
             return Integer.parseInt(inputString());

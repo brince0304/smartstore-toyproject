@@ -43,7 +43,7 @@ public class SummaryMenu implements Menu {
             }
             else {
                 customers.classifyCustomerByGroups(groups);
-                customers.groupByGroup(groups);
+                customers.groupingByGroup(groups);
                 System.out.println("요약 조회 메뉴");
                 System.out.println("1. 등급별 고객 목록");
                 System.out.println("2. 등급별 고객 이름순 조회");
@@ -83,15 +83,15 @@ public class SummaryMenu implements Menu {
         System.out.println("1.오름차순 2.내림차순 정렬을 설정해주세요.");
         int sort = Integer.parseInt(inputString());
         if (sort == 1) {
-            classifiedCustomers.printBySortedDetailNONE(classifiedCustomers.sortBySpendHourAsc(classifiedCustomers.getNONEGroup()));
-            classifiedCustomers.printBySortedDetailGENERAL(classifiedCustomers.sortBySpendHourAsc(classifiedCustomers.getGENERALGroup()));
-            classifiedCustomers.printBySortedDetailVIP(classifiedCustomers.sortBySpendHourAsc(classifiedCustomers.getVIPGroup()));
-            classifiedCustomers.printBySortedDetailVVIP(classifiedCustomers.sortBySpendHourAsc(classifiedCustomers.getVVIPGroup()));
+            classifiedCustomers.printNoneGroupBySortedList(classifiedCustomers.sortBySpendHourAsc(classifiedCustomers.getNONEGroup()));
+            classifiedCustomers.printGeneralGroupBySortedList(classifiedCustomers.sortBySpendHourAsc(classifiedCustomers.getGENERALGroup()));
+            classifiedCustomers.printVIPGroupBySortedList(classifiedCustomers.sortBySpendHourAsc(classifiedCustomers.getVIPGroup()));
+            classifiedCustomers.printVVIPGroupBySortedList(classifiedCustomers.sortBySpendHourAsc(classifiedCustomers.getVVIPGroup()));
         } else if (sort == 2) {
-            classifiedCustomers.printBySortedDetailNONE(classifiedCustomers.sortBySpendHourDesc(classifiedCustomers.getNONEGroup()));
-            classifiedCustomers.printBySortedDetailGENERAL(classifiedCustomers.sortBySpendHourDesc(classifiedCustomers.getGENERALGroup()));
-            classifiedCustomers.printBySortedDetailVIP(classifiedCustomers.sortBySpendHourDesc(classifiedCustomers.getVIPGroup()));
-            classifiedCustomers.printBySortedDetailVVIP(classifiedCustomers.sortBySpendHourDesc(classifiedCustomers.getVVIPGroup()));
+            classifiedCustomers.printNoneGroupBySortedList(classifiedCustomers.sortBySpendHourDesc(classifiedCustomers.getNONEGroup()));
+            classifiedCustomers.printGeneralGroupBySortedList(classifiedCustomers.sortBySpendHourDesc(classifiedCustomers.getGENERALGroup()));
+            classifiedCustomers.printVIPGroupBySortedList(classifiedCustomers.sortBySpendHourDesc(classifiedCustomers.getVIPGroup()));
+            classifiedCustomers.printVVIPGroupBySortedList(classifiedCustomers.sortBySpendHourDesc(classifiedCustomers.getVVIPGroup()));
         } else {
             System.out.println("번호를 잘못입력하셨습니다.");
         }}
@@ -105,15 +105,15 @@ public class SummaryMenu implements Menu {
             System.out.println("1.오름차순 2.내림차순 정렬을 설정해주세요.");
             int sort = Integer.parseInt(inputString());
             if (sort == 1) {
-                classifiedCustomers.printBySortedDetailNONE(classifiedCustomers.sortBySpendMoneyAsc(classifiedCustomers.getNONEGroup()));
-                classifiedCustomers.printBySortedDetailGENERAL(classifiedCustomers.sortBySpendMoneyAsc(classifiedCustomers.getGENERALGroup()));
-                classifiedCustomers.printBySortedDetailVIP(classifiedCustomers.sortBySpendMoneyAsc(classifiedCustomers.getVIPGroup()));
-                classifiedCustomers.printBySortedDetailVVIP(classifiedCustomers.sortBySpendMoneyAsc(classifiedCustomers.getVVIPGroup()));
+                classifiedCustomers.printNoneGroupBySortedList(classifiedCustomers.sortBySpendMoneyAsc(classifiedCustomers.getNONEGroup()));
+                classifiedCustomers.printGeneralGroupBySortedList(classifiedCustomers.sortBySpendMoneyAsc(classifiedCustomers.getGENERALGroup()));
+                classifiedCustomers.printVIPGroupBySortedList(classifiedCustomers.sortBySpendMoneyAsc(classifiedCustomers.getVIPGroup()));
+                classifiedCustomers.printVVIPGroupBySortedList(classifiedCustomers.sortBySpendMoneyAsc(classifiedCustomers.getVVIPGroup()));
             } else if (sort == 2) {
-                classifiedCustomers.printBySortedDetailNONE(classifiedCustomers.sortBySpendMoneyDesc(classifiedCustomers.getNONEGroup()));
-                classifiedCustomers.printBySortedDetailGENERAL(classifiedCustomers.sortBySpendMoneyDesc(classifiedCustomers.getGENERALGroup()));
-                classifiedCustomers.printBySortedDetailVIP(classifiedCustomers.sortBySpendMoneyDesc(classifiedCustomers.getVIPGroup()));
-                classifiedCustomers.printBySortedDetailVVIP(classifiedCustomers.sortBySpendMoneyDesc(classifiedCustomers.getVVIPGroup()));
+                classifiedCustomers.printNoneGroupBySortedList(classifiedCustomers.sortBySpendMoneyDesc(classifiedCustomers.getNONEGroup()));
+                classifiedCustomers.printGeneralGroupBySortedList(classifiedCustomers.sortBySpendMoneyDesc(classifiedCustomers.getGENERALGroup()));
+                classifiedCustomers.printVIPGroupBySortedList(classifiedCustomers.sortBySpendMoneyDesc(classifiedCustomers.getVIPGroup()));
+                classifiedCustomers.printVVIPGroupBySortedList(classifiedCustomers.sortBySpendMoneyDesc(classifiedCustomers.getVVIPGroup()));
             } else {
                 System.out.println("번호를 잘못입력하셨습니다.");
             }
@@ -128,15 +128,15 @@ public class SummaryMenu implements Menu {
             System.out.println("1.오름차순 2.내림차순 정렬을 설정해주세요.");
             int sort = Integer.parseInt(inputString());
             if (sort == 1) {
-                classifiedCustomers.printBySortedDetailNONE(classifiedCustomers.sortByNameAsc(classifiedCustomers.getNONEGroup()));
-                classifiedCustomers.printBySortedDetailGENERAL(classifiedCustomers.sortByNameAsc(classifiedCustomers.getGENERALGroup()));
-                classifiedCustomers.printBySortedDetailVIP(classifiedCustomers.sortByNameAsc(classifiedCustomers.getVIPGroup()));
-                classifiedCustomers.printBySortedDetailVVIP(classifiedCustomers.sortByNameAsc(classifiedCustomers.getVVIPGroup()));
+                classifiedCustomers.printNoneGroupBySortedList(classifiedCustomers.sortByNameAsc(classifiedCustomers.getNONEGroup()));
+                classifiedCustomers.printGeneralGroupBySortedList(classifiedCustomers.sortByNameAsc(classifiedCustomers.getGENERALGroup()));
+                classifiedCustomers.printVIPGroupBySortedList(classifiedCustomers.sortByNameAsc(classifiedCustomers.getVIPGroup()));
+                classifiedCustomers.printVVIPGroupBySortedList(classifiedCustomers.sortByNameAsc(classifiedCustomers.getVVIPGroup()));
             } else if (sort == 2) {
-                classifiedCustomers.printBySortedDetailNONE(classifiedCustomers.sortByNameDesc(classifiedCustomers.getNONEGroup()));
-                classifiedCustomers.printBySortedDetailGENERAL(classifiedCustomers.sortByNameDesc(classifiedCustomers.getGENERALGroup()));
-                classifiedCustomers.printBySortedDetailVIP(classifiedCustomers.sortByNameDesc(classifiedCustomers.getVIPGroup()));
-                classifiedCustomers.printBySortedDetailVVIP(classifiedCustomers.sortByNameDesc(classifiedCustomers.getVVIPGroup()));
+                classifiedCustomers.printNoneGroupBySortedList(classifiedCustomers.sortByNameDesc(classifiedCustomers.getNONEGroup()));
+                classifiedCustomers.printGeneralGroupBySortedList(classifiedCustomers.sortByNameDesc(classifiedCustomers.getGENERALGroup()));
+                classifiedCustomers.printVIPGroupBySortedList(classifiedCustomers.sortByNameDesc(classifiedCustomers.getVIPGroup()));
+                classifiedCustomers.printVVIPGroupBySortedList(classifiedCustomers.sortByNameDesc(classifiedCustomers.getVVIPGroup()));
             } else {
                 System.out.println("번호를 잘못입력하셨습니다.");
             }

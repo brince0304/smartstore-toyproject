@@ -49,12 +49,12 @@ public class CustomerMenu implements Menu { //예외는 메뉴에서 처리
                 case 1:
                     System.out.println("등록을 원하는 인원 수를 입력하세요");
                     int count = Integer.parseInt(inputString());
-                    repeatCustomerRegisterByCount(count);
+                    repeatCreateByCount(count);
                     break;
                 case 2:
                     if(!customers.isEmpty()){
                     customers.printCustomerCountBySerialId();
-                    deleteCustomerFromCustomersBySerialId(inputIdForCustomerDeleting());}
+                    deleteCustomerBySerialId(inputIdForCustomerDeleting());}
                     else{
                         PrintNoCustomer.print();
                     }
@@ -63,7 +63,7 @@ public class CustomerMenu implements Menu { //예외는 메뉴에서 처리
                     if(!customers.isEmpty()) {
                         customers.printCustomerCountBySerialId();
                         System.out.println("수정을 원하는 고유 번호를 입력해주세요.");
-                        updateCustomerInfoBySerialId(inputString());
+                        updateCustomerBySerialId(inputString());
                     }
                     else{
                         PrintNoCustomer.print();
@@ -71,7 +71,7 @@ public class CustomerMenu implements Menu { //예외는 메뉴에서 처리
                     break;
                 case 4:
                     if(!customers.isEmpty()) {
-                        printCustomerListWithoutType();
+                        printCustomerListWithoutGroup();
                     }
                     else{
                         PrintNoCustomer.print();
@@ -93,38 +93,37 @@ public class CustomerMenu implements Menu { //예외는 메뉴에서 처리
         return inputString();
     }
 
-    public void repeatCustomerRegisterByCount(int count) throws IOException {
+    public void repeatCreateByCount(int count) throws IOException {
         for (int i = 0; i < count; i++) {
             while(true) {
                 System.out.println(i + 1 + "번째 고객 정보를 입력하세요");
-                Customer customer = buildCustomer();
+                Customer customer = create();
                 if(customer!=null){
-                    addCustomerToCustomers(customer);
-                    break;
+                    saveCustomer(customer);
                 }
                 else{
                     System.out.println("다시 시도해주세요.");
-                    break;
                 }
+                break;
             }
         }
     }
 
 
-    public Customer buildCustomer() throws IOException {
+    public Customer create() throws IOException {
         try {
             System.out.println("고객 이름을 영문자로 3글자 이상 입력해주세요.");
             String name = inputString();
-            if (!validateCustomerName(name)) {
+            if (validateCustomerName(name)) {
                 return null;
             }
             System.out.println("고객아이디를 5자이상 12자 이하로 입력해주세요.");
             System.out.println("첫글자에는 영문자만 입력 가능합니다. 이후엔 대소문자/숫자/특수문자(_)만 입력 가능합니다.");
             String id = inputString();
-            if (!validateCustomerId(id)) {
+            if (validateCustomerId(id)) {
                 return null;
             }
-            if (checkIsCustomerExistBySerialId(id)) {
+            if (findCustomerByCustomerId(id)) {
                 return null;
             } else {
                 System.out.println("이용 금액을 만원 단위로 입력해주세요");
@@ -145,7 +144,7 @@ public class CustomerMenu implements Menu { //예외는 메뉴에서 처리
 
 
 
-    public void addCustomerToCustomers(Customer customer)  {
+    public void saveCustomer(Customer customer)  {
         if (customer != null) {
             if (customers.addCustomer(customer)) {
                 System.out.println("등록되었습니다.");
@@ -155,9 +154,9 @@ public class CustomerMenu implements Menu { //예외는 메뉴에서 처리
         }
     }
 
-    public void deleteCustomerFromCustomersBySerialId(String id) {
+    public void deleteCustomerBySerialId(String id) {
         if(!customers.isEmpty()){
-        if(customers.getBySerialId(id)!=null) {
+        if(customers.getCustomerBySerialId(id)!=null) {
             customers.deleteCustomerBySerialId(id);
         }
         else{
@@ -169,7 +168,7 @@ public class CustomerMenu implements Menu { //예외는 메뉴에서 처리
 
     }
 
-    public void updateCustomerInfoBySerialId(String id) throws IOException,NumberFormatException {
+    public void updateCustomerBySerialId(String id) throws IOException,NumberFormatException {
         if(!customers.isEmpty()) {
             try {
                 if (customers.getByCustomerId(id) == null) {
@@ -178,20 +177,24 @@ public class CustomerMenu implements Menu { //예외는 메뉴에서 처리
                     System.out.println("고객 수정 메뉴");
                     System.out.println("이름을 입력해주세요");
                     String name = inputString();
-                    if (!validateCustomerName(name)) {
+                    if (validateCustomerName(name)) {
                         return;
                     }
                     System.out.println("아이디를 입력해주세요");
                     String customerId = inputString();
-                    if (!validateCustomerId(customerId)) {
+                    if (validateCustomerId(customerId)) {
                         return;
                     }
                     System.out.println("이용 금액을 입력해주세요");
                     int spendMoney = Integer.parseInt(inputString());
                     System.out.println("이용 시간을 입력해주세요");
                     int spendHour = Integer.parseInt(inputString());
-                    customers.updateCustomerBySerialId(id, name, customerId, spendHour, spendMoney);
-                    System.out.println("수정되었습니다.");
+                    if(customers.updateCustomerBySerialId(id, name, customerId, spendHour, spendMoney)){
+                        System.out.println("수정되었습니다.");
+                    }
+                    else{
+                        System.out.println("수정에 실패했습니다.");
+                    }
                 }
             } catch (NumberFormatException e) {
                 ExceptionManager.catchInputTypeMismatchException();
@@ -203,7 +206,7 @@ public class CustomerMenu implements Menu { //예외는 메뉴에서 처리
     }
 
 
-    public void printCustomerListWithoutType() {
+    public void printCustomerListWithoutGroup() {
         Customer[] list = customers.getCustomers();
         if (list != null) {
             if (list[0] == null) {
@@ -224,25 +227,25 @@ public class CustomerMenu implements Menu { //예외는 메뉴에서 처리
 
     public boolean validateCustomerId(String customerId){
         if(Validator.validCustomerId(customerId)){
-            return true;
+            return false;
         }
         else{
             PrintCustomerIdNotValidated.print();
-            return false;
+            return true;
         }
     }
 
     public boolean validateCustomerName(String customerName){
         if(Validator.validCustomerName(customerName)){
-           return true;
+           return false;
         }
         else{
             PrintCustomerNameNotValidated.print();
-            return false;
+            return true;
         }
     }
 
-    public boolean checkIsCustomerExistBySerialId(String customerId)  {
+    public boolean findCustomerByCustomerId(String customerId)  { //중복된 아이디 검사
             for (int i = 0; i < customers.getCustomerCount(); i++) {
                 if (customers.getCustomers()[i] != null) {
                     if (customers.getCustomers()[i].getCustomerId().equals(customerId)) {

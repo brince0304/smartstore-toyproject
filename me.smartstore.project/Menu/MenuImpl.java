@@ -28,6 +28,7 @@ public class MenuImpl implements  Menu{
     @Override
     public int showMenu() throws IOException , InputTypeMismatchException {
         try {
+            System.out.println("고객 관리 프로그램");
             System.out.println("메뉴를 선택하세요");
             System.out.println("1. 고객 관리");
             System.out.println("2. 그룹 관리");
