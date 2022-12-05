@@ -27,7 +27,7 @@ public class GroupMenu implements Menu {
     public int showMenu() throws IOException {
         try {
             System.out.println("그룹 관리 메뉴");
-            System.out.println("1. 분류 기준 설정");
+            System.out.println("1. 분류 기준 추가");
             System.out.println("2. 분류 기준 수정");
             System.out.println("3. 분류 기준 조회");
             System.out.println("4. 메인 메뉴로 돌아가기");
@@ -44,7 +44,17 @@ public class GroupMenu implements Menu {
     public void selectMenu(int menu) throws IOException {
         switch(menu){
             case 1:
-                initGroupStandard();
+                if(!groups.checkGroupsInit()) {
+                    System.out.println("초기화가 되지 않은 그룹의 기준을 설정합니다.");
+                    while(true){
+                        if(!initGroupStandard()){
+                            break;
+                        }
+                    }
+                }
+                else{
+                    System.out.println("이미 그룹의 기준이 설정되어 있습니다.");
+                }
                 break;
             case 2:
                 updateGroupStandard();
@@ -63,8 +73,12 @@ public class GroupMenu implements Menu {
 
     private void printGroupStandard() throws IOException {
         try {
-            if (groups.checkIsGroupInit()) {
-                int grade =getGroupIndexFromInput();
+            if (groups.checkGroupsInit()) {
+                System.out.println("그룹의 기준을 출력합니다.");
+                System.out.println("1. GENERAL");
+                System.out.println("2. VIP");
+                System.out.println("3. VVIP");
+                int grade = Integer.parseInt(inputString());
                 if (validateInput(grade)) {
                     groups.getGroupByIndex(grade);
                 }
@@ -81,48 +95,60 @@ public class GroupMenu implements Menu {
 
     private void updateGroupStandard() throws IOException {
         try {
-            if (groups.checkIsGroupInit()) {
-                int grade = getGroupIndexFromInput();
+            if (groups.checkGroupsInit()) {
+                System.out.println("수정을 원하는 그룹을 선택해주세요.");
+                System.out.println("1. GENERAL");
+                System.out.println("2. VIP");
+                System.out.println("3. VVIP");
+                int grade = Integer.parseInt(inputString());
                 if (validateInput(grade)) {
                     Parameter parameter = create();
                     if(parameter!=null){
                     if (groups.updateGroupByIndex(grade, parameter)) {
                         System.out.println("등급 기준 수정이 완료되었습니다.");
-                    } }else {
-                        System.out.println("등급 기준 수정에 실패했습니다.");
+                    } else {
+                        System.out.println("실패했습니다. 다른 그룹과 기준 범위가 충돌합니다.");
                     }
-                } else {
-                    System.out.println("잘못된 입력입니다.");
                 }
             } else {
-                System.out.println("분류 기준을 먼저 설정해주세요.");
+                    System.out.println("잘못된 입력입니다.");
+                }
             }
-        }
-        catch (NumberFormatException e) {
+            else{
+                System.out.println("그룹이 초기화 되지 않았습니다.");
+            }
+}
+        catch (NumberFormatException e){
             ExceptionManager.catchInputTypeMismatchException();
         }
-        }
+    }
 
 
-    private void initGroupStandard() throws IOException {
+
+    private boolean initGroupStandard() throws IOException {
         try{
             int grade = getGroupIndexFromInput();
-        if(validateInput(grade)) {
-            Parameter parameter = create();
-            if(parameter!=null){
-            if (groups.addGroup(grade, parameter)) {
-                System.out.println("분류 기준이 설정되었습니다.");
-            }} else {
-                System.out.println("실패했습니다.");
+            if(grade==0){
+                return false;
             }
-        }
-        else{
-            System.out.println("잘못된 입력입니다.");
-        }
+            Parameter parameter = create();
+            if(parameter!=null) {
+                if (groups.addGroup(grade, parameter)) {
+                    System.out.println("분류 기준이 설정되었습니다.");
+                } else {
+                    System.out.println("등급의 기준 범위가 충돌하거나 잘못된 입력입니다.");
+                }
+                return true;
+            }
+            else{
+                System.out.println("메뉴로 돌아갑니다.");
+                return false;
+            }
         }
         catch (NumberFormatException e){
             ExceptionManager.catchInputTypeMismatchException();
         }
+        return false;
     }
 
 
@@ -133,11 +159,18 @@ public class GroupMenu implements Menu {
 
     public Parameter create() throws IOException {
         try {
-            System.out.println("분류 기준을 입력해주세요. 시간/만원 단위로 입력해주세요.");
+            System.out.println("분류 기준을 시간/만원 단위로 입력해주세요.");
+            System.out.println("메뉴로 돌아가려면 0을 입력해주세요.");
             System.out.println("이용 시간을 입력해주세요.");
             int spendHour = Integer.parseInt(inputString());
+            if(spendHour == 0){
+                return null;
+            }
             System.out.println("이용 금액을 입력해주세요.");
             int spendMoney = Integer.parseInt(inputString());
+            if(spendMoney == 0){
+                return null;
+            }
             return Parameter.of(spendHour, spendMoney);
         }
         catch (NumberFormatException e){
@@ -148,11 +181,19 @@ public class GroupMenu implements Menu {
 
     public int getGroupIndexFromInput() throws IOException {
         try {
-            System.out.println("해당 그룹의 등급을 입력해주세요.");
-            System.out.println("1. GENERAL");
-            System.out.println("2. VIP");
-            System.out.println("3. VVIP");
-            return Integer.parseInt(inputString());
+            if(groups.checkOtherGroupIsInit(1)){
+                System.out.println("GENERAL 등급의 기준을 입력해주세요.");
+                return 1;
+            }
+            if(groups.checkOtherGroupIsInit(2)){
+                System.out.println("VIP 등급의 기준을 입력해주세요.");
+                return 2;
+            }
+            if(groups.checkOtherGroupIsInit(3)){
+                System.out.println("VVIP 등급의 기준을 입력해주세요.");
+                return 3;
+            }
+            return 0;
         }
         catch (NumberFormatException e){
             ExceptionManager.catchInputTypeMismatchException();

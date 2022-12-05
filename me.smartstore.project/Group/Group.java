@@ -2,6 +2,8 @@ package Group;
 
 import Customer.Customer;
 
+import java.util.Objects;
+
 public class Group {
     private final GroupType grouptype;
     private Parameter parameter;
@@ -18,6 +20,19 @@ public class Group {
 
     public GroupType getGroupType() {
         return grouptype;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Group)) return false;
+        Group group = (Group) o;
+        return grouptype == group.grouptype && parameter.equals(group.parameter);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(grouptype, parameter);
     }
 
     @Override

@@ -23,29 +23,29 @@ public class Groups {
     }
 
 public boolean addGroup(int grade,Parameter parameter) {
-        groups[grade] = Group.of(parameter,grade);
-        return true;
+        if(checkGroupParameterIsAvailable(grade,parameter)) {
+            groups[grade] = Group.of(parameter, grade);
+            return true;
+        }
+        return false;
 }
 
 
     public boolean updateGroupByIndex(int grade, Parameter parameter) {
-        for (Group group : groups) {
-            if (group.getGroupType().equals(GroupType.values()[grade])) {
-                group.setParameter(parameter);
-                System.out.println("그룹이 수정되었습니다.");
-                return true;
-            }
-        }
-        return false;
+       if(checkGroupParameterForUpdatingIsAvailable(grade,parameter)) {
+           groups[grade] = Group.of(parameter, grade);
+           return true;
+       }
+         return false;
     }
 
 
 
     public void getGroupByIndex(int inputString) {
-        for (int i = 0; i < groups.length; i++) {
-                if (groups[i].getGroupType().equals(GroupType.values()[inputString])) {
-                    System.out.println(groups[i].toString());
-                }
+        for (Group group : groups) {
+            if (group.getGroupType().equals(GroupType.values()[inputString])) {
+                System.out.println(group.toString());
+            }
         }
     }
     public void printGroupList() {
@@ -78,7 +78,7 @@ public boolean addGroup(int grade,Parameter parameter) {
                 '}';
     }
 
-    public boolean checkIsGroupInit(){
+    public boolean checkGroupsInit(){
         for(int i=3; i>0; i--){
             if(groups[i].getParameter().getSpendHourStandard() ==0 && groups[i].getParameter().getSpendMoneyStandard() ==0){
                 return false;
@@ -86,6 +86,84 @@ public boolean addGroup(int grade,Parameter parameter) {
         }
         return true;
     }
+
+    public boolean checkGroupParameterIsAvailable(int grade, Parameter parameter){
+        if(parameter.getSpendHourStandard()<1 || parameter.getSpendMoneyStandard()<1){
+            return false;
+        }
+        switch(grade){
+            case 1:
+                return parameter.getSpendHourStandard() >= 1 && parameter.getSpendMoneyStandard() >= 1;
+            case 2:
+                if(groups[1].getParameter().getSpendHourStandard() ==0 && groups[1].getParameter().getSpendMoneyStandard() ==0){
+                    return false;
+                }
+                else{
+                    return parameter.getSpendHourStandard() > groups[1].getParameter().getSpendHourStandard() && parameter.getSpendMoneyStandard() > groups[1].getParameter().getSpendMoneyStandard();
+                }
+            case 3:
+                if((groups[2].getParameter().getSpendHourStandard() ==0 && groups[2].getParameter().getSpendMoneyStandard() ==0) || (groups[1].getParameter().getSpendHourStandard() ==0 && groups[1].getParameter().getSpendMoneyStandard() ==0)){
+                    return false;
+                }
+                else{
+                    return parameter.getSpendHourStandard() > groups[2].getParameter().getSpendHourStandard() && parameter.getSpendMoneyStandard() > groups[2].getParameter().getSpendMoneyStandard();
+                }
+            default:
+                return false;
+        }
+    }
+
+    public boolean checkOtherGroupIsInit(int grade){
+        switch(grade){
+            case 1:
+                return groups[1].getParameter().getSpendHourStandard() ==0 && groups[1].getParameter().getSpendMoneyStandard() ==0;
+            case 2:
+                if(groups[1].getParameter().getSpendHourStandard() ==0 && groups[1].getParameter().getSpendMoneyStandard() ==0){
+                    return false;
+                }
+                else{
+                    return groups[2].getParameter().getSpendHourStandard() ==0 && groups[2].getParameter().getSpendMoneyStandard() ==0;
+                }
+            case 3:
+                if((groups[2].getParameter().getSpendHourStandard() ==0 && groups[2].getParameter().getSpendMoneyStandard() ==0) || (groups[1].getParameter().getSpendHourStandard() ==0 && groups[1].getParameter().getSpendMoneyStandard() ==0)){
+                    return false;
+                }
+                else{
+                    return groups[3].getParameter().getSpendHourStandard() ==0 && groups[3].getParameter().getSpendMoneyStandard() ==0;
+                }
+            default:
+                return false;
+        }
+    }
+
+    public boolean checkGroupParameterForUpdatingIsAvailable(int grade,Parameter parameter){
+        switch(grade){
+            case 1:
+                if(parameter.getSpendHourStandard() >= groups[2].getParameter().getSpendHourStandard() || parameter.getSpendMoneyStandard() >= groups[2].getParameter().getSpendMoneyStandard()){
+                    return false;
+                }
+                else{
+                    return parameter.getSpendHourStandard() >= 1 && parameter.getSpendMoneyStandard() >= 1;
+                }
+            case 2:
+                if(parameter.getSpendHourStandard()<=groups[1].getParameter().getSpendHourStandard() || parameter.getSpendMoneyStandard()<=groups[1].getParameter().getSpendMoneyStandard()){
+                    return false;
+                }
+                else{
+                    return parameter.getSpendHourStandard() < groups[3].getParameter().getSpendHourStandard() || parameter.getSpendMoneyStandard() < groups[3].getParameter().getSpendMoneyStandard();
+                }
+            case 3:
+                if(parameter.getSpendHourStandard()<=groups[2].getParameter().getSpendHourStandard() || parameter.getSpendMoneyStandard()<=groups[2].getParameter().getSpendMoneyStandard()){
+                    return false;
+                }
+                else{
+                    return parameter.getSpendHourStandard() > groups[2].getParameter().getSpendHourStandard() && parameter.getSpendMoneyStandard() > groups[2].getParameter().getSpendMoneyStandard();
+                }
+        }
+        return false;
+    }
+
+
 
 }
 

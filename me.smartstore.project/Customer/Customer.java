@@ -35,14 +35,13 @@ public class Customer {
         if (this == o) return true;
         if (!(o instanceof Customer)) return false;
         Customer customer = (Customer) o;
-        return customerId.equals(customer.customerId);
+        return spendHour == customer.spendHour && spendMoney == customer.spendMoney && id.equals(customer.id) && name.equals(customer.name) && customerId.equals(customer.customerId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, name, customerId, spendHour, spendMoney);
     }
-
 
     @Override
     public String toString() {

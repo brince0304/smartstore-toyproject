@@ -33,7 +33,7 @@ public class SummaryMenu implements Menu {
     @Override
     public int showMenu() throws IOException {
         try {
-            if(!groups.checkIsGroupInit()){
+            if(!groups.checkGroupsInit()){
                 System.out.println("그룹이 초기화 되지 않았습니다.");
                 return 0;
             }
